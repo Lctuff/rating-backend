@@ -5,12 +5,12 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  const posts = await Post.find();
+  const posts = await Post.find().populate("comments");
   res.send(posts);
 });
 
 router.get("/:id", validateObjectId, async (req, res) => {
-  const post = await Post.findById(req.params.id);
+  const post = await Post.findById(req.params.id).populate("comments");
 
   if (!post)
     return res.status(404).send("The post with the given ID was not found.");
