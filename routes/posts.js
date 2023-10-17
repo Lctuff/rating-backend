@@ -58,4 +58,13 @@ router.put("/:id", async (req, res) => {
   res.send(post);
 });
 
+router.delete("/:id", async (req, res) => {
+  const post = await Post.findByIdAndRemove(req.params.id);
+
+  if (!post)
+    return res.status(404).send("The task with the given ID was not found.");
+
+  res.send(post);
+});
+
 module.exports = router;
