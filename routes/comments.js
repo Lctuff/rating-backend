@@ -5,6 +5,20 @@ const express = require("express");
 
 const router = express.Router();
 
+router.get("/", async (req, res) => {
+  const comments = await Comment.find();
+  res.send(comments);
+});
+
+router.get("/:id", validateObjectId, async (req, res) => {
+  const comment = await Comment.findById(req.params.id);
+
+  if (!comment)
+    return res.status(404).send("The comment with the given ID was not found.");
+
+  res.send(comment);
+});
+
 router.post("/:id", async (req, res) => {
   const post = await Post.findById(req.params.id);
 

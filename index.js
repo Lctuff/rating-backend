@@ -9,7 +9,7 @@ const app = express();
 app.use(express.json());
 
 app.use("/api/posts", posts);
-app.use("/api/posts/comment", comments);
+app.use("/api/comment", comments);
 
 mongoose.connect("mongodb://127.0.0.1/posts");
 
