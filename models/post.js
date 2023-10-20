@@ -10,6 +10,10 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  review: {
+    type: String,
+    required: true,
+  },
   img: {
     type: String,
     required: true,
@@ -39,6 +43,7 @@ function validatePost(post) {
   const schema = Joi.object({
     title: Joi.string().required(),
     description: Joi.string().required(),
+    review: Joi.string().required(),
     category: Joi.string().required(),
     img: Joi.string().required(),
     rating: Joi.number().required(),

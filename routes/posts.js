@@ -25,6 +25,7 @@ router.post("/", async (req, res) => {
   const post = new Post({
     title: req.body.title,
     description: req.body.description,
+    rewiew: req.body.rewiew,
     img: req.body.img,
     category: req.body.category,
     rating: req.body.rating,
@@ -46,6 +47,7 @@ router.put("/:id", async (req, res) => {
     $set: {
       title: req.body.title,
       description: req.body.description,
+      rewiew: req.body.rewiew,
       img: req.body.img,
       category: req.body.category,
       rating: req.body.rating,
