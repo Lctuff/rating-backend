@@ -17,12 +17,12 @@ const userSchema = new mongoose.Schema({
   },
 });
 function validateUser(user) {
-  const schema = {
+  const schema = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().required().email(),
     password: Joi.string().required(),
-  };
-  return Joi.validate(user, schema);
+  });
+  return schema.validate(user);
 }
 const User = mongoose.model("User", userSchema);
 
