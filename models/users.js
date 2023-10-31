@@ -15,6 +15,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  profileImg: {
+    type: String,
+  },
 });
 function validateUser(user) {
   const schema = Joi.object({

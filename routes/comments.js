@@ -28,7 +28,8 @@ router.post("/:id", async (req, res) => {
   const id = req.params.id;
 
   const comment = new Comment({
-    text: req.body.comment,
+    text: req.body.text,
+    user: req.body.user,
     post: id,
   });
   try {
@@ -39,7 +40,7 @@ router.post("/:id", async (req, res) => {
     await post.save();
 
     res.send(result);
-  } catch (error) {
+  } catch (ex) {
     for (field in ex.errors) console.log(ex.errors[field].message);
   }
 });

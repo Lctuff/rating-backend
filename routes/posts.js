@@ -10,7 +10,10 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:id", validateObjectId, async (req, res) => {
-  const post = await Post.findById(req.params.id).populate("comments");
+  const post = await Post.findById(req.params.id).populate({
+    path: "comments",
+    populate: { path: "user", select: "-password" },
+  });
 
   if (!post)
     return res.status(404).send("The post with the given ID was not found.");
