@@ -35,7 +35,12 @@ router.post("/", async (req, res) => {
   await user.save();
 
   const token = jwt.sign(
-    { _id: user._id, name: user.name, email: user.email },
+    {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      profileImg: user.profileImg,
+    },
     "jwtPrivateKey"
   );
   res
@@ -54,7 +59,12 @@ router.post("/auth", async (req, res) => {
   if (!validPassword) return res.status(400).send("Invalid email or password");
 
   const token = jwt.sign(
-    { _id: user._id, name: user.name, email: user.email },
+    {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      profileImg: user.profileImg,
+    },
     "jwtPrivateKey"
   );
   res.send(token);

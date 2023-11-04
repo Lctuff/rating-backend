@@ -48,7 +48,8 @@ router.post("/:id", async (req, res) => {
 router.put("/:id", async (req, res) => {
   const comment = await Comment.findByIdAndUpdate(req.params.id, {
     $set: {
-      text: req.body.comment,
+      text: req.body.text,
+      user: req.body.user,
     },
   });
 
