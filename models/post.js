@@ -1,5 +1,6 @@
 const Joi = require("joi");
 const mongoose = require("mongoose");
+Joi.objectId = require("joi-objectid")(Joi);
 
 const postSchema = new mongoose.Schema({
   title: {
@@ -32,9 +33,13 @@ const postSchema = new mongoose.Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Comment",
-      required: true,
     },
   ],
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
 });
 
 const Post = mongoose.model("Post", postSchema);
@@ -47,6 +52,7 @@ function validatePost(post) {
     category: Joi.string().required(),
     img: Joi.string().required(),
     rating: Joi.number().required(),
+    user: Joi.objectId().required(),
   });
   return schema.validate(post);
 }

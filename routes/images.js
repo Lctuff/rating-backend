@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 
 const multer = require("multer");
+const auth = require("../middleware/auth");
 
 const storage = multer.diskStorage({
   destination: function (req, file, callback) {
@@ -15,7 +16,7 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
-router.post("/", upload.single("files"), uploadFiles);
+router.post("/", auth, upload.single("files"), uploadFiles);
 
 function uploadFiles(req, res) {
   console.log(req.body);

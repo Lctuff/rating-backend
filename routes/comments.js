@@ -1,3 +1,4 @@
+const auth = require("../middleware/auth");
 const validateObjectId = require("../middleware/validateObjectId");
 const { Comment } = require("../models/comments");
 const { Post } = require("../models/post");
@@ -19,7 +20,7 @@ router.get("/:id", validateObjectId, async (req, res) => {
   res.send(comment);
 });
 
-router.post("/:id", async (req, res) => {
+router.post("/:id", auth, async (req, res) => {
   const post = await Post.findById(req.params.id);
 
   if (!post)
@@ -45,7 +46,7 @@ router.post("/:id", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   const comment = await Comment.findByIdAndUpdate(req.params.id, {
     $set: {
       text: req.body.text,
@@ -59,7 +60,7 @@ router.put("/:id", async (req, res) => {
   res.send(comment);
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   const comment = await Comment.findByIdAndRemove(req.params.id);
 
   if (!comment)

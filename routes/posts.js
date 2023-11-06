@@ -1,3 +1,4 @@
+const auth = require("../middleware/auth");
 const validateObjectId = require("../middleware/validateObjectId");
 const { Post, validate } = require("../models/post");
 const express = require("express");
@@ -5,15 +6,23 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  const posts = await Post.find().populate("comments");
+  const posts = await Post.find().populate({
+    path: "user",
+    select: "-password",
+  });
   res.send(posts);
 });
 
 router.get("/:id", validateObjectId, async (req, res) => {
-  const post = await Post.findById(req.params.id).populate({
-    path: "comments",
-    populate: { path: "user", select: "-password" },
-  });
+  const post = await Post.findById(req.params.id)
+    .populate({
+      path: "comments",
+      populate: { path: "user", select: "-password" },
+    })
+    .populate({
+      path: "user",
+      select: "-password",
+    });
 
   if (!post)
     return res.status(404).send("The post with the given ID was not found.");
@@ -21,8 +30,9 @@ router.get("/:id", validateObjectId, async (req, res) => {
   res.send(post);
 });
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const { error } = validate(req.body);
+
   if (error) return res.status(400).send(error.details[0].message);
 
   const post = new Post({
@@ -32,6 +42,7 @@ router.post("/", async (req, res) => {
     img: req.body.img,
     category: req.body.category,
     rating: req.body.rating,
+    user: req.body.user,
   });
   try {
     const result = await post.save();
@@ -42,8 +53,9 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   const { error } = validate(req.body);
+
   if (error) return res.status(400).send(error.details[0].message);
 
   const post = await Post.findByIdAndUpdate(req.params.id, {
@@ -54,6 +66,7 @@ router.put("/:id", async (req, res) => {
       img: req.body.img,
       category: req.body.category,
       rating: req.body.rating,
+      user: req.body.user,
     },
   });
 
@@ -63,7 +76,7 @@ router.put("/:id", async (req, res) => {
   res.send(post);
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   const post = await Post.findByIdAndRemove(req.params.id);
 
   if (!post)
