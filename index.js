@@ -6,8 +6,14 @@ const users = require("./routes/users");
 const posts = require("./routes/posts");
 const comments = require("./routes/comments");
 const images = require("./routes/images");
+const config = require("config");
 
 const app = express();
+
+if (!config.get("jwtPrivateKey")) {
+  console.error("FATAL ERROR: jwtPrivateKey is not defined");
+  process.exit(1);
+}
 
 app.use(cors());
 
